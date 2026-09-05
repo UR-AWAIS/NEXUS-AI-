@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ronin Shell — The Turtle Warrior</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+<style>
+  /* Bootstrap reset shims so its defaults don't fight the custom theme */
+  .btn:focus, .btn:focus-visible { box-shadow: 0 0 0 3px rgba(230,200,98,0.35); }
+  a { color: inherit; }
+  :root{
+    --bg: #0F1712;
+    --bg-deep: #0A0F0B;
+    --shell: #4A7856;
+    --shell-dark: #2E4E37;
+    --gold: #C9A227;
+    --gold-soft: #E6C862;
+    --jade: #A8D5BA;
+    --parchment: #E8E2D0;
+    --parchment-dim: rgba(232,226,208,0.55);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html, body {
+    height:100%;
+    background: var(--bg);
+    color: var(--parchment);
+    font-family: 'Work Sans', sans-serif;
+    overflow-x:hidden;
+  }
+
+  .display {
+    font-family: 'Zen Old Mincho', serif;
+  }
+
+  /* ---------- Layout shell ---------- */
+  .stage {
+    position:relative;
+    width:100%;
+    height:100vh;
+    min-height:640px;
+    display:flex;
+  }
+
+  #canvas-wrap {
+    position:absolute;
+    inset:0;
+    z-index:1;
+  }
+
+  canvas { display:block; }
+
+  .vignette {
+    position:absolute;
+    inset:0;
+    z-index:2;
+    pointer-events:none;
+    background:
+      radial-gradient(ellipse at 68% 55%, rgba(15,23,18,0) 0%, rgba(15,23,18,0) 40%, rgba(10,15,11,0.55) 78%, rgba(10,15,11,0.92) 100%),
+      linear-gradient(180deg, rgba(10,15,11,0.75) 0%, rgba(10,15,11,0) 16%, rgba(10,15,11,0) 78%, rgba(10,15,11,0.85) 100%);
+  }
+
+  /* ---------- Top mark ---------- */
+  .mark {
+    position:absolute;
+    top:2.4rem;
+    left:3rem;
+    z-index:5;
+    display:flex;
+    align-items:baseline;
+    gap:0.6rem;
+  }
+  .mark .glyph {
+    color:var(--gold-soft);
+    font-size:1.25rem;
+  }
+  .mark .name {
+    font-family:'Zen Old Mincho', serif;
+    font-size:1.15rem;
+    letter-spacing:0.04em;
+    color:var(--parchment);
+  }
+
+  /* ---------- Side nav: the 5 options ---------- */
+  nav.gate {
+    position:absolute;
+    top:0;
+    right:0;
+    height:100%;
+    z-index:6;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding-right:3rem;
+    gap:0;
+  }
+
+  nav.gate a {
+    position:relative;
+    display:block;
+    text-decoration:none;
+    color:var(--parchment-dim);
+    font-family:'Work Sans', sans-serif;
+    font-weight:400;
+    font-size:0.95rem;
+    letter-spacing:0.03em;
+    padding:0.85rem 0 0.85rem 1.6rem;
+    border-left:1px solid rgba(201,162,39,0.25);
+    transition: color 0.35s ease, border-color 0.35s ease, padding-left 0.35s ease;
+  }
+
+  nav.gate a i {
+    display:inline-block;
+    width:1.4rem;
+    text-align:center;
+    color:var(--gold);
+    font-size:0.85rem;
+    margin-right:0.7rem;
+    opacity:0.85;
+  }
+
+  nav.gate a:hover,
+  nav.gate a.active {
+    color:var(--parchment);
+    border-left-color: var(--gold-soft);
+    padding-left:2.1rem;
+  }
+
+  /* ---------- Hero copy ---------- */
+  .hero-copy {
+    position:absolute;
+    z-index:5;
+    left:3rem;
+    top:50%;
+    transform:translateY(-50%);
+    max-width:30rem;
+  }
+
+  .hero-copy .eyebrow-line {
+    display:flex;
+    align-items:center;
+    gap:0.75rem;
+    margin-bottom:1.4rem;
+  }
+  .hero-copy .eyebrow-line .rule {
+    width:2.2rem;
+    height:1px;
+    background:var(--gold);
+  }
+  .hero-copy .eyebrow-line span {
+    font-size:0.85rem;
+    color:var(--jade);
+    letter-spacing:0.02em;
+  }
+
+  .hero-copy h1 {
+    font-family:'Zen Old Mincho', serif;
+    font-weight:600;
+    font-size:clamp(2.4rem, 5vw, 3.6rem);
+    line-height:1.18;
+    color:var(--parchment);
+    margin-bottom:1.4rem;
+  }
+
+  .hero-copy p {
+    font-size:1.02rem;
+    line-height:1.7;
+    color:var(--parchment-dim);
+    max-width:26rem;
+    margin-bottom:2.1rem;
+  }
+
+  .hero-actions {
+    display:flex;
+    align-items:center;
+    gap:1.8rem;
+  }
+
+  .btn-primary {
+    font-family:'Work Sans', sans-serif;
+    font-size:0.95rem;
+    color:var(--bg-deep);
+    background:var(--gold-soft);
+    padding:0.85rem 1.8rem;
+    border:none;
+    border-radius:2px;
+    cursor:pointer;
+    letter-spacing:0.02em;
+    transition: background 0.25s ease, transform 0.25s ease;
+  }
+  .btn-primary:hover { background:var(--gold); transform:translateY(-1px); }
+
+  .btn-ghost {
+    font-size:0.9rem;
+    color:var(--parchment-dim);
+    text-decoration:none;
+    border-bottom:1px solid rgba(232,226,208,0.3);
+    padding-bottom:2px;
+    transition:color 0.25s ease, border-color 0.25s ease;
+  }
+  .btn-ghost:hover { color:var(--parchment); border-color:var(--parchment); }
+
+  /* ---------- Scroll cue ---------- */
+  .scroll-cue {
+    position:absolute;
+    bottom:2.4rem;
+    left:3rem;
+    z-index:5;
+    display:flex;
+    align-items:center;
+    gap:0.7rem;
+    color:var(--parchment-dim);
+    font-size:0.78rem;
+    letter-spacing:0.03em;
+  }
+  .scroll-cue .line {
+    width:1px;
+    height:2.4rem;
+    background:linear-gradient(to bottom, var(--gold-soft), transparent);
+  }
+
+  /* ---------- Loading state ---------- */
+  #loading {
+    position:absolute;
+    inset:0;
+    z-index:20;
+    background:var(--bg-deep);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:1rem;
+    transition:opacity 0.6s ease;
+  }
+  #loading .ring {
+    width:2.4rem; height:2.4rem;
+    border:2px solid rgba(201,162,39,0.2);
+    border-top-color:var(--gold-soft);
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+  }
+  #loading span {
+    font-size:0.85rem;
+    color:var(--parchment-dim);
+    letter-spacing:0.04em;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+
+  /* ---------- Below-fold: the five sections ---------- */
+  main.sections {
+    position:relative;
+    z-index:5;
+    background:var(--bg-deep);
+  }
+
+  .section {
+    padding:6.5rem 3rem;
+    max-width:64rem;
+    margin:0 auto;
+    border-top:1px solid rgba(201,162,39,0.14);
+  }
+
+  .section .tag {
+    font-size:0.82rem;
+    color:var(--gold);
+    margin-bottom:0.9rem;
+  }
+
+  .section h2 {
+    font-family:'Zen Old Mincho', serif;
+    font-size:clamp(1.7rem, 3vw, 2.3rem);
+    font-weight:600;
+    color:var(--parchment);
+    margin-bottom:1.3rem;
+    max-width:32rem;
+  }
+
+  .section p {
+    color:var(--parchment-dim);
+    line-height:1.75;
+    max-width:36rem;
+    font-size:1rem;
+  }
+
+  .arsenal-grid { margin-top:2.4rem; margin-left:0; }
+  .arsenal-item {
+    height:100%;
+    border-left:1px solid rgba(201,162,39,0.3);
+    padding-left:1.1rem;
+  }
+  .arsenal-icon {
+    display:block;
+    color:var(--gold);
+    font-size:1.1rem;
+    margin-bottom:0.9rem;
+    opacity:0.9;
+  }
+  .arsenal-item .name {
+    font-family:'Zen Old Mincho', serif;
+    color:var(--jade);
+    font-size:1.05rem;
+    margin-bottom:0.4rem;
+  }
+  .arsenal-item p { font-size:0.92rem; }
+
+  footer {
+    padding:3rem;
+    text-align:left;
+    color:var(--parchment-dim);
+    font-size:0.8rem;
+    border-top:1px solid rgba(201,162,39,0.14);
+  }
+  footer i {
+    color:var(--parchment-dim);
+    font-size:1rem;
+    transition:color 0.25s ease;
+  }
+  footer i:hover { color:var(--gold-soft); }
+
+  @media (max-width:820px){
+    nav.gate { display:none; }
+    .hero-copy { left:1.6rem; max-width:88vw; }
+    .mark { left:1.6rem; top:1.6rem; }
+    .scroll-cue { left:1.6rem; }
+    .section { padding:4.5rem 1.6rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<div id="loading">
+  <div class="ring"></div>
+  <span>sharpening the blade…</span>
+</div>
+
+<div class="stage">
+  <div id="canvas-wrap"></div>
+  <div class="vignette"></div>
+
+  <div class="mark">
+    <i class="fa-solid fa-shield-halved glyph"></i>
+    <span class="name display">Ronin Shell</span>
+  </div>
+
+  <div class="hero-copy">
+    <div class="eyebrow-line">
+      <div class="rule"></div>
+      <span>a warrior in his own shell</span>
+    </div>
+    <h1 class="display">Slow to anger.<br>Fast to strike.</h1>
+    <p>An original turtle-warrior built for the dojo floor — trained in silence, moved by bamboo wind. Drag to turn him. Scroll to learn his way.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" id="cta-spin"><i class="fa-solid fa-wind me-2"></i>Set him spinning</button>
+      <a href="#legend" class="btn-ghost">Read his story <i class="fa-solid fa-arrow-right-long ms-1"></i></a>
+    </div>
+  </div>
+
+  <nav class="gate">
+    <a href="#home" class="active"><i class="fa-solid fa-torii-gate"></i>Home</a>
+    <a href="#legend"><i class="fa-solid fa-scroll"></i>Legend</a>
+    <a href="#arsenal"><i class="fa-solid fa-khanda"></i>Arsenal</a>
+    <a href="#dojo"><i class="fa-solid fa-hands-praying"></i>Dojo</a>
+    <a href="#scroll"><i class="fa-solid fa-feather-pointed"></i>Scroll</a>
+  </nav>
+
+  <div class="scroll-cue">
+    <div class="line"></div>
+    <span><i class="fa-solid fa-chevron-down me-1"></i>scroll</span>
+  </div>
+</div>
+
+<main class="sections">
+  <section class="section" id="legend">
+    <div class="tag">01 — the legend</div>
+    <h2 class="display">Raised under the floorboards of an old dojo</h2>
+    <p>He was never named for a color or a brother. He was named for what he carries — a shell that has taken every blow meant for someone slower, and a will that never once asked to trade it in. Ronin Shell moves the way old bamboo moves: bent by every storm, broken by none.</p>
+  </section>
+
+  <section class="section" id="arsenal">
+    <div class="tag">02 — the arsenal</div>
+    <h2 class="display">What he trained with, not what he was given</h2>
+    <div class="row arsenal-grid gx-4 gy-4">
+      <div class="col-12 col-sm-6 col-lg-4">
+        <div class="arsenal-item">
+          <i class="fa-solid fa-khanda arsenal-icon"></i>
+          <div class="name display">Twin Sai</div>
+          <p>Close-range, defensive first — built to catch a blade, not just meet it.</p>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4">
+        <div class="arsenal-item">
+          <i class="fa-solid fa-staff-snake arsenal-icon"></i>
+          <div class="name display">Bo Staff</div>
+          <p>Distance and patience. The weapon of someone willing to wait you out.</p>
+        </div>
+      </div>
+      <div class="col-12 col-sm-6 col-lg-4">
+        <div class="arsenal-item">
+          <i class="fa-solid fa-shield-halved arsenal-icon"></i>
+          <div class="name display">Shell Stance</div>
+          <p>No weapon at all — just the discipline to know when not to draw one.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="dojo">
+    <div class="tag">03 — the dojo</div>
+    <h2 class="display">Trains alone. Fights for the four who don't.</h2>
+    <p>Every session starts the same way: lights low, shell to the wall, breath counted in fours. Not for show — the dojo has no audience. Just the floor, the staff, and whatever version of himself showed up that day.</p>
+  </section>
+
+  <section class="section" id="scroll">
+    <div class="tag">04 — the scroll</div>
+    <h2 class="display">Leave a message on his scroll</h2>
+    <p>This corner is quiet on purpose — wire it up to your own form handler when you're ready to actually collect messages.</p>
+  </section>
+
+  <footer class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+    <span>Ronin Shell — an original character, built for this page. Not affiliated with any existing franchise.</span>
+    <span class="d-flex gap-3">
+      <i class="fa-brands fa-github"></i>
+      <i class="fa-brands fa-instagram"></i>
+      <i class="fa-solid fa-envelope"></i>
+    </span>
+  </footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  const wrap = document.getElementById('canvas-wrap');
+  const loading = document.getElementById('loading');
+
+  const scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x0F1712, 0.045);
+
+  const camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.set(2.4, 1.6, 7.2);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x000000, 0);
+  wrap.appendChild(renderer.domElement);
+
+  // Position the model to the right side of the composition
+  const rig = new THREE.Group();
+  rig.position.set(1.35, -0.35, 0);
+  scene.add(rig);
+
+  // ---------- Lighting: dojo torchlight ----------
+  const key = new THREE.DirectionalLight(0xE6C862, 1.5);
+  key.position.set(3, 5, 4);
+  scene.add(key);
+
+  const rim = new THREE.DirectionalLight(0xA8D5BA, 0.9);
+  rim.position.set(-4, 2, -3);
+  scene.add(rim);
+
+  const fill = new THREE.AmbientLight(0x203324, 0.7);
+  scene.add(fill);
+
+  const groundGlow = new THREE.PointLight(0xC9A227, 0.6, 8);
+  groundGlow.position.set(0, -1.5, 2);
+  scene.add(groundGlow);
+
+  // ---------- Materials ----------
+  const shellMat = new THREE.MeshStandardMaterial({ color: 0x3E6A48, roughness: 0.55, metalness: 0.08 });
+  const shellRimMat = new THREE.MeshStandardMaterial({ color: 0xC9A227, roughness: 0.4, metalness: 0.35 });
+  const skinMat = new THREE.MeshStandardMaterial({ color: 0x5E9468, roughness: 0.65, metalness: 0.02 });
+  const skinDarkMat = new THREE.MeshStandardMaterial({ color: 0x466F4E, roughness: 0.65, metalness: 0.02 });
+  const bandMat = new THREE.MeshStandardMaterial({ color: 0x1B2A20, roughness: 0.5, metalness: 0.1 });
+  const goldMat = new THREE.MeshStandardMaterial({ color: 0xC9A227, roughness: 0.35, metalness: 0.5 });
+  const eyeMat = new THREE.MeshStandardMaterial({ color: 0xF4EFDD, roughness: 0.3, emissive: 0x2a2410, emissiveIntensity: 0.15 });
+  const pupilMat = new THREE.MeshStandardMaterial({ color: 0x0A0F0B, roughness: 0.4 });
+
+  const body = new THREE.Group();
+  rig.add(body);
+
+  // Torso
+  const torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.62, 0.55, 6, 12), skinMat);
+  torso.position.y = 1.05;
+  torso.scale.set(1, 1.05, 0.82);
+  body.add(torso);
+
+  // Shell (back)
+  const shellDome = new THREE.Mesh(new THREE.SphereGeometry(0.78, 24, 16, 0, Math.PI * 2, 0, Math.PI / 1.7), shellMat);
+  shellDome.position.set(0, 1.18, -0.22);
+  shellDome.scale.set(1, 0.82, 0.9);
+  shellDome.rotation.x = Math.PI;
+  body.add(shellDome);
+
+  const shellRing = new THREE.Mesh(new THREE.TorusGeometry(0.62, 0.045, 8, 24), shellRimMat);
+  shellRing.position.set(0, 0.86, -0.22);
+  shellRing.rotation.x = Math.PI / 2;
+  body.add(shellRing);
+
+  // Shell plates (simple hex-ish suggestion via small pentagon-ish boxes)
+  const plateGeo = new THREE.CylinderGeometry(0.13, 0.13, 0.05, 6);
+  const platePositions = [
+    [0, 1.55, -0.55], [-0.28, 1.35, -0.62], [0.28, 1.35, -0.62],
+    [-0.3, 1.05, -0.58], [0.3, 1.05, -0.58], [0, 0.95, -0.68]
+  ];
+  platePositions.forEach(p => {
+    const plate = new THREE.Mesh(plateGeo, shellRimMat.clone());
+    plate.material.opacity = 0.85;
+    plate.position.set(p[0], p[1], p[2]);
+    plate.rotation.x = Math.PI / 2.3;
+    body.add(plate);
+  });
+
+  // Belly plastron
+  const plastron = new THREE.Mesh(new THREE.SphereGeometry(0.5, 16, 12, 0, Math.PI * 2, 0, Math.PI / 1.9), new THREE.MeshStandardMaterial({ color: 0xB9AE86, roughness: 0.6 }));
+  plastron.position.set(0, 1.02, 0.32);
+  plastron.scale.set(0.92, 0.8, 0.55);
+  body.add(plastron);
+
+  // Head
+  const headGroup = new THREE.Group();
+  headGroup.position.set(0, 1.92, 0.12);
+  body.add(headGroup);
+
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.36, 20, 16), skinMat);
+  head.scale.set(1, 0.95, 1.05);
+  headGroup.add(head);
+
+  const snout = new THREE.Mesh(new THREE.SphereGeometry(0.2, 16, 12), skinDarkMat);
+  snout.position.set(0, -0.05, 0.28);
+  snout.scale.set(0.9, 0.7, 0.8);
+  headGroup.add(snout);
+
+  // Eyes
+  [-0.16, 0.16].forEach(x => {
+    const eyeWhite = new THREE.Mesh(new THREE.SphereGeometry(0.085, 12, 10), eyeMat);
+    eyeWhite.position.set(x, 0.06, 0.3);
+    headGroup.add(eyeWhite);
+    const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.04, 8, 8), pupilMat);
+    pupil.position.set(x, 0.06, 0.37);
+    headGroup.add(pupil);
+  });
+
+  // Mask / bandana
+  const band = new THREE.Mesh(new THREE.TorusGeometry(0.365, 0.055, 8, 20, Math.PI * 1.35), bandMat);
+  band.position.set(0, 0.09, 0);
+  band.rotation.y = Math.PI / 2;
+  band.rotation.z = -0.2;
+  headGroup.add(band);
+
+  const bandTailL = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.015, 0.4, 6), bandMat);
+  bandTailL.position.set(-0.3, 0.05, -0.22);
+  bandTailL.rotation.z = 0.5;
+  bandTailL.rotation.x = 0.3;
+  headGroup.add(bandTailL);
+
+  const bandTailR = bandTailL.clone();
+  bandTailR.position.x = 0.32;
+  bandTailR.rotation.z = -0.6;
+  headGroup.add(bandTailR);
+
+  // Arms
+  function makeArm(sign){
+    const arm = new THREE.Group();
+    arm.position.set(sign * 0.62, 1.28, 0.02);
+
+    const upper = new THREE.Mesh(new THREE.CapsuleGeometry(0.13, 0.35, 4, 8), skinMat);
+    upper.position.y = -0.18;
+    upper.rotation.z = sign * 0.35;
+    arm.add(upper);
+
+    const fore = new THREE.Mesh(new THREE.CapsuleGeometry(0.11, 0.32, 4, 8), skinDarkMat);
+    fore.position.set(sign * 0.16, -0.5, 0.05);
+    fore.rotation.z = sign * 0.15;
+    arm.add(fore);
+
+    const hand = new THREE.Mesh(new THREE.SphereGeometry(0.1, 10, 8), skinMat);
+    hand.position.set(sign * 0.2, -0.72, 0.08);
+    arm.add(hand);
+
+    // Sai weapon
+    const sai = new THREE.Group();
+    const saiBlade = new THREE.Mesh(new THREE.ConeGeometry(0.025, 0.42, 6), goldMat);
+    saiBlade.rotation.x = Math.PI;
+    saiBlade.position.y = 0.24;
+    sai.add(saiBlade);
+    const saiGuard = new THREE.Mesh(new THREE.TorusGeometry(0.07, 0.012, 6, 12), goldMat);
+    saiGuard.rotation.x = Math.PI / 2;
+    sai.add(saiGuard);
+    const saiHandle = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.018, 0.16, 6), bandMat);
+    saiHandle.position.y = -0.1;
+    sai.add(saiHandle);
+    sai.position.set(sign * 0.2, -0.86, 0.08);
+    sai.rotation.z = sign * 0.15;
+    arm.add(sai);
+
+    return arm;
+  }
+  body.add(makeArm(-1));
+  body.add(makeArm(1));
+
+  // Legs
+  function makeLeg(sign){
+    const leg = new THREE.Group();
+    leg.position.set(sign * 0.28, 0.58, 0.05);
+
+    const thigh = new THREE.Mesh(new THREE.CapsuleGeometry(0.15, 0.32, 4, 8), skinDarkMat);
+    thigh.position.y = -0.15;
+    leg.add(thigh);
+
+    const shin = new THREE.Mesh(new THREE.CapsuleGeometry(0.13, 0.3, 4, 8), skinMat);
+    shin.position.y = -0.48;
+    leg.add(shin);
+
+    const foot = new THREE.Mesh(new THREE.SphereGeometry(0.13, 10, 8), skinDarkMat);
+    foot.position.set(0, -0.68, 0.06);
+    foot.scale.set(1, 0.6, 1.3);
+    leg.add(foot);
+
+    // Wrap
+    const wrap1 = new THREE.Mesh(new THREE.TorusGeometry(0.14, 0.02, 6, 12), bandMat);
+    wrap1.position.y = -0.32;
+    wrap1.rotation.x = Math.PI / 2;
+    leg.add(wrap1);
+
+    return leg;
+  }
+  body.add(makeLeg(-1));
+  body.add(makeLeg(1));
+
+  // Ground disc — dojo floor circle
+  const floor = new THREE.Mesh(
+    new THREE.CircleGeometry(2.4, 48),
+    new THREE.MeshStandardMaterial({ color: 0x142016, roughness: 0.9, transparent: true, opacity: 0.75 })
+  );
+  floor.rotation.x = -Math.PI / 2;
+  floor.position.y = -0.15;
+  rig.add(floor);
+
+  const floorRing = new THREE.Mesh(
+    new THREE.RingGeometry(1.55, 1.6, 48),
+    new THREE.MeshStandardMaterial({ color: 0xC9A227, roughness: 0.4, metalness: 0.4, side: THREE.DoubleSide, transparent:true, opacity:0.55 })
+  );
+  floorRing.rotation.x = -Math.PI / 2;
+  floorRing.position.y = -0.148;
+  rig.add(floorRing);
+
+  // Drifting embers / dust motes
+  const emberCount = 60;
+  const emberGeo = new THREE.BufferGeometry();
+  const positions = new Float32Array(emberCount * 3);
+  for (let i = 0; i < emberCount; i++){
+    positions[i*3] = (Math.random()-0.5) * 6;
+    positions[i*3+1] = Math.random() * 4 - 0.5;
+    positions[i*3+2] = (Math.random()-0.5) * 4 + 1;
+  }
+  emberGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  const emberMat = new THREE.PointsMaterial({ color: 0xE6C862, size: 0.02, transparent:true, opacity:0.6 });
+  const embers = new THREE.Points(emberGeo, emberMat);
+  scene.add(embers);
+
+  // ---------- Interaction: drag to rotate, auto-rotate otherwise ----------
+  let targetRotY = 0.35;
+  let currentRotY = 0.35;
+  let autoSpin = true;
+  let isDragging = false;
+  let lastX = 0;
+  let spinBoost = 0;
+
+  body.rotation.y = currentRotY;
+
+  function onDown(x){ isDragging = true; lastX = x; autoSpin = false; }
+  function onMove(x){
+    if(!isDragging) return;
+    const dx = x - lastX;
+    targetRotY += dx * 0.008;
+    lastX = x;
+  }
+  function onUp(){ isDragging = false; }
+
+  renderer.domElement.addEventListener('mousedown', e => onDown(e.clientX));
+  window.addEventListener('mousemove', e => onMove(e.clientX));
+  window.addEventListener('mouseup', onUp);
+  renderer.domElement.addEventListener('touchstart', e => onDown(e.touches[0].clientX), {passive:true});
+  window.addEventListener('touchmove', e => onMove(e.touches[0].clientX), {passive:true});
+  window.addEventListener('touchend', onUp);
+
+  document.getElementById('cta-spin').addEventListener('click', () => {
+    spinBoost += Math.PI * 2;
+  });
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  const clock = new THREE.Clock();
+
+  function animate(){
+    requestAnimationFrame(animate);
+    const t = clock.getElapsedTime();
+
+    if (!isDragging){
+      if (spinBoost > 0.002){
+        const step = Math.min(spinBoost, 0.05);
+        targetRotY += step;
+        spinBoost -= step;
+      } else if (autoSpin) {
+        targetRotY += 0.0032;
+      }
+    }
+    currentRotY += (targetRotY - currentRotY) * 0.08;
+    body.rotation.y = currentRotY;
+
+    body.position.y = Math.sin(t * 1.1) * 0.045;
+    headGroup.rotation.y = Math.sin(t * 0.6) * 0.06;
+
+    const emberPos = emberGeo.attributes.position;
+    for (let i = 0; i < emberCount; i++){
+      emberPos.array[i*3+1] += 0.0025;
+      if (emberPos.array[i*3+1] > 3.5) emberPos.array[i*3+1] = -0.5;
+    }
+    emberPos.needsUpdate = true;
+
+    floorRing.rotation.z += 0.0008;
+
+    renderer.render(scene, camera);
+  }
+
+  // Reveal once first frame is ready
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      loading.style.opacity = '0';
+      setTimeout(() => loading.style.display = 'none', 650);
+    });
+  });
+
+  animate();
+})();
+</script>
+
+</body>
+</html>
