@@ -9,10 +9,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;600;700&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+
 <style>
   /* Bootstrap reset shims so its defaults don't fight the custom theme */
   .btn:focus, .btn:focus-visible { box-shadow: 0 0 0 3px rgba(230,200,98,0.35); }
   a { color: inherit; }
+
   :root{
     --bg: #0F1712;
     --bg-deep: #0A0F0B;
@@ -39,6 +41,7 @@
     font-family: 'Zen Old Mincho', serif;
   }
 
+  /* ---------- Layout shell ---------- */
   .stage {
     position:relative;
     width:100%;
@@ -61,10 +64,23 @@
     z-index:2;
     pointer-events:none;
     background:
-      radial-gradient(ellipse at 68% 55%, rgba(15,23,18,0) 0%, rgba(15,23,18,0) 40%, rgba(10,15,11,0.55) 78%, rgba(10,15,11,0.92) 100%),
-      linear-gradient(180deg, rgba(10,15,11,0.75) 0%, rgba(10,15,11,0) 16%, rgba(10,15,11,0) 78%, rgba(10,15,11,0.85) 100%);
+      radial-gradient(
+        ellipse at 68% 55%,
+        rgba(15,23,18,0) 0%,
+        rgba(15,23,18,0) 40%,
+        rgba(10,15,11,0.55) 78%,
+        rgba(10,15,11,0.92) 100%
+      ),
+      linear-gradient(
+        180deg,
+        rgba(10,15,11,0.75) 0%,
+        rgba(10,15,11,0) 16%,
+        rgba(10,15,11,0) 78%,
+        rgba(10,15,11,0.85) 100%
+      );
   }
 
+  /* ---------- Top mark ---------- */
   .mark {
     position:absolute;
     top:2.4rem;
@@ -87,6 +103,7 @@
     color:var(--parchment);
   }
 
+  /* ---------- Side nav: the 5 options ---------- */
   nav.gate {
     position:absolute;
     top:0;
@@ -111,7 +128,10 @@
     letter-spacing:0.03em;
     padding:0.85rem 0 0.85rem 1.6rem;
     border-left:1px solid rgba(201,162,39,0.25);
-    transition: color 0.35s ease, border-color 0.35s ease, padding-left 0.35s ease;
+    transition:
+      color 0.35s ease,
+      border-color 0.35s ease,
+      padding-left 0.35s ease;
   }
 
   nav.gate a i {
@@ -131,6 +151,7 @@
     padding-left:2.1rem;
   }
 
+  /* ---------- Hero copy ---------- */
   .hero-copy {
     position:absolute;
     z-index:5;
@@ -192,10 +213,13 @@
     border-radius:2px;
     cursor:pointer;
     letter-spacing:0.02em;
-    transition: background 0.25s ease, transform 0.25s ease;
+    transition:background 0.25s ease, transform 0.25s ease;
   }
 
-  .btn-primary:hover { background:var(--gold); transform:translateY(-1px); }
+  .btn-primary:hover {
+    background:var(--gold);
+    transform:translateY(-1px);
+  }
 
   .btn-ghost {
     font-size:0.9rem;
@@ -211,6 +235,7 @@
     border-color:var(--parchment);
   }
 
+  /* ---------- Scroll cue ---------- */
   .scroll-cue {
     position:absolute;
     bottom:2.4rem;
@@ -227,9 +252,14 @@
   .scroll-cue .line {
     width:1px;
     height:2.4rem;
-    background:linear-gradient(to bottom, var(--gold-soft), transparent);
+    background:linear-gradient(
+      to bottom,
+      var(--gold-soft),
+      transparent
+    );
   }
 
+  /* ---------- Loading state ---------- */
   #loading {
     position:absolute;
     inset:0;
@@ -244,7 +274,8 @@
   }
 
   #loading .ring {
-    width:2.4rem; height:2.4rem;
+    width:2.4rem;
+    height:2.4rem;
     border:2px solid rgba(201,162,39,0.2);
     border-top-color:var(--gold-soft);
     border-radius:50%;
@@ -257,8 +288,13 @@
     letter-spacing:0.04em;
   }
 
-  @keyframes spin { to { transform:rotate(360deg); } }
+  @keyframes spin {
+    to {
+      transform:rotate(360deg);
+    }
+  }
 
+  /* ---------- Below-fold: the five sections ---------- */
   main.sections {
     position:relative;
     z-index:5;
@@ -294,7 +330,10 @@
     font-size:1rem;
   }
 
-  .arsenal-grid { margin-top:2.4rem; margin-left:0; }
+  .arsenal-grid {
+    margin-top:2.4rem;
+    margin-left:0;
+  }
 
   .arsenal-item {
     height:100%;
@@ -317,7 +356,9 @@
     margin-bottom:0.4rem;
   }
 
-  .arsenal-item p { font-size:0.92rem; }
+  .arsenal-item p {
+    font-size:0.92rem;
+  }
 
   footer {
     padding:3rem;
@@ -333,14 +374,32 @@
     transition:color 0.25s ease;
   }
 
-  footer i:hover { color:var(--gold-soft); }
+  footer i:hover {
+    color:var(--gold-soft);
+  }
 
   @media (max-width:820px){
-    nav.gate { display:none; }
-    .hero-copy { left:1.6rem; max-width:88vw; }
-    .mark { left:1.6rem; top:1.6rem; }
-    .scroll-cue { left:1.6rem; }
-    .section { padding:4.5rem 1.6rem; }
+    nav.gate {
+      display:none;
+    }
+
+    .hero-copy {
+      left:1.6rem;
+      max-width:88vw;
+    }
+
+    .mark {
+      left:1.6rem;
+      top:1.6rem;
+    }
+
+    .scroll-cue {
+      left:1.6rem;
+    }
+
+    .section {
+      padding:4.5rem 1.6rem;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -352,6 +411,7 @@
   }
 </style>
 </head>
+
 <body>
 
 <div id="loading">
@@ -360,7 +420,9 @@
 </div>
 
 <div class="stage">
+
   <div id="canvas-wrap"></div>
+
   <div class="vignette"></div>
 
   <div class="mark">
@@ -369,12 +431,16 @@
   </div>
 
   <div class="hero-copy">
+
     <div class="eyebrow-line">
       <div class="rule"></div>
       <span>a warrior in his own shell</span>
     </div>
 
-    <h1 class="display">Slow to anger.<br>Fast to strike.</h1>
+    <h1 class="display">
+      Slow to anger.<br>
+      Fast to strike.
+    </h1>
 
     <p>
       An original turtle-warrior built for the dojo floor —
@@ -383,51 +449,70 @@
     </p>
 
     <div class="hero-actions">
+
       <button class="btn btn-primary" id="cta-spin">
-        <i class="fa-solid fa-wind me-2"></i>Set him spinning
+        <i class="fa-solid fa-wind me-2"></i>
+        Set him spinning
       </button>
 
       <a href="#legend" class="btn-ghost">
         Read his story
         <i class="fa-solid fa-arrow-right-long ms-1"></i>
       </a>
+
     </div>
+
   </div>
 
   <nav class="gate">
+
     <a href="#home" class="active">
-      <i class="fa-solid fa-torii-gate"></i>Home
+      <i class="fa-solid fa-torii-gate"></i>
+      Home
     </a>
 
     <a href="#legend">
-      <i class="fa-solid fa-scroll"></i>Legend
+      <i class="fa-solid fa-scroll"></i>
+      Legend
     </a>
 
     <a href="#arsenal">
-      <i class="fa-solid fa-khanda"></i>Arsenal
+      <i class="fa-solid fa-khanda"></i>
+      Arsenal
     </a>
 
     <a href="#dojo">
-      <i class="fa-solid fa-hands-praying"></i>Dojo
+      <i class="fa-solid fa-hands-praying"></i>
+      Dojo
     </a>
 
     <a href="#scroll">
-      <i class="fa-solid fa-feather-pointed"></i>Scroll
+      <i class="fa-solid fa-feather-pointed"></i>
+      Scroll
     </a>
+
   </nav>
 
   <div class="scroll-cue">
+
     <div class="line"></div>
+
     <span>
-      <i class="fa-solid fa-chevron-down me-1"></i>scroll
+      <i class="fa-solid fa-chevron-down me-1"></i>
+      scroll
     </span>
+
   </div>
+
 </div>
 
 <main class="sections">
 
   <section class="section" id="legend">
-    <div class="tag">01 — the legend</div>
+
+    <div class="tag">
+      01 — the legend
+    </div>
 
     <h2 class="display">
       Raised under the floorboards of an old dojo
@@ -440,11 +525,14 @@
       Ronin Shell moves the way old bamboo moves: bent by every storm,
       broken by none.
     </p>
+
   </section>
 
   <section class="section" id="arsenal">
 
-    <div class="tag">02 — the arsenal</div>
+    <div class="tag">
+      02 — the arsenal
+    </div>
 
     <h2 class="display">
       What he trained with, not what he was given
@@ -453,11 +541,14 @@
     <div class="row arsenal-grid gx-4 gy-4">
 
       <div class="col-12 col-sm-6 col-lg-4">
+
         <div class="arsenal-item">
 
           <i class="fa-solid fa-khanda arsenal-icon"></i>
 
-          <div class="name display">Twin Sai</div>
+          <div class="name display">
+            Twin Sai
+          </div>
 
           <p>
             Close-range, defensive first — built to catch a blade,
@@ -465,14 +556,18 @@
           </p>
 
         </div>
+
       </div>
 
       <div class="col-12 col-sm-6 col-lg-4">
+
         <div class="arsenal-item">
 
           <i class="fa-solid fa-staff-snake arsenal-icon"></i>
 
-          <div class="name display">Bo Staff</div>
+          <div class="name display">
+            Bo Staff
+          </div>
 
           <p>
             Distance and patience. The weapon of someone willing to
@@ -480,14 +575,18 @@
           </p>
 
         </div>
+
       </div>
 
       <div class="col-12 col-sm-6 col-lg-4">
+
         <div class="arsenal-item">
 
           <i class="fa-solid fa-shield-halved arsenal-icon"></i>
 
-          <div class="name display">Shell Stance</div>
+          <div class="name display">
+            Shell Stance
+          </div>
 
           <p>
             No weapon at all — just the discipline to know when not
@@ -495,14 +594,18 @@
           </p>
 
         </div>
+
       </div>
 
     </div>
+
   </section>
 
   <section class="section" id="dojo">
 
-    <div class="tag">03 — the dojo</div>
+    <div class="tag">
+      03 — the dojo
+    </div>
 
     <h2 class="display">
       Trains alone. Fights for the four who don't.
@@ -519,7 +622,9 @@
 
   <section class="section" id="scroll">
 
-    <div class="tag">04 — the scroll</div>
+    <div class="tag">
+      04 — the scroll
+    </div>
 
     <h2 class="display">
       Leave a message on his scroll
@@ -540,9 +645,13 @@
     </span>
 
     <span class="d-flex gap-3">
+
       <i class="fa-brands fa-github"></i>
+
       <i class="fa-brands fa-instagram"></i>
+
       <i class="fa-solid fa-envelope"></i>
+
     </span>
 
   </footer>
@@ -551,8 +660,8 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 
-<!-- ONLY CHANGE IS HERE -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r160/three.min.js"></script>
+<!-- CORRECTED THREE.JS URL -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
 
 <script>
 (function(){
@@ -562,7 +671,10 @@
 
   const scene = new THREE.Scene();
 
-  scene.fog = new THREE.FogExp2(0x0F1712, 0.045);
+  scene.fog = new THREE.FogExp2(
+    0x0F1712,
+    0.045
+  );
 
   const camera = new THREE.PerspectiveCamera(
     38,
@@ -571,7 +683,11 @@
     100
   );
 
-  camera.position.set(2.4, 1.6, 7.2);
+  camera.position.set(
+    2.4,
+    1.6,
+    7.2
+  );
 
   const renderer = new THREE.WebGLRenderer({
     antialias: true,
@@ -579,7 +695,10 @@
   });
 
   renderer.setPixelRatio(
-    Math.min(window.devicePixelRatio, 2)
+    Math.min(
+      window.devicePixelRatio,
+      2
+    )
   );
 
   renderer.setSize(
@@ -587,22 +706,37 @@
     window.innerHeight
   );
 
-  renderer.setClearColor(0x000000, 0);
+  renderer.setClearColor(
+    0x000000,
+    0
+  );
 
-  wrap.appendChild(renderer.domElement);
+  wrap.appendChild(
+    renderer.domElement
+  );
 
   const rig = new THREE.Group();
 
-  rig.position.set(1.35, -0.35, 0);
+  rig.position.set(
+    1.35,
+    -0.35,
+    0
+  );
 
   scene.add(rig);
+
+  /* ---------- Lighting: dojo torchlight ---------- */
 
   const key = new THREE.DirectionalLight(
     0xE6C862,
     1.5
   );
 
-  key.position.set(3, 5, 4);
+  key.position.set(
+    3,
+    5,
+    4
+  );
 
   scene.add(key);
 
@@ -611,7 +745,11 @@
     0.9
   );
 
-  rim.position.set(-4, 2, -3);
+  rim.position.set(
+    -4,
+    2,
+    -3
+  );
 
   scene.add(rim);
 
@@ -628,103 +766,143 @@
     8
   );
 
-  groundGlow.position.set(0, -1.5, 2);
+  groundGlow.position.set(
+    0,
+    -1.5,
+    2
+  );
 
   scene.add(groundGlow);
 
-  const shellMat = new THREE.MeshStandardMaterial({
-    color: 0x3E6A48,
-    roughness: 0.55,
-    metalness: 0.08
-  });
+  /* ---------- Materials ---------- */
 
-  const shellRimMat = new THREE.MeshStandardMaterial({
-    color: 0xC9A227,
-    roughness: 0.4,
-    metalness: 0.35
-  });
+  const shellMat =
+    new THREE.MeshStandardMaterial({
+      color: 0x3E6A48,
+      roughness: 0.55,
+      metalness: 0.08
+    });
 
-  const skinMat = new THREE.MeshStandardMaterial({
-    color: 0x5E9468,
-    roughness: 0.65,
-    metalness: 0.02
-  });
+  const shellRimMat =
+    new THREE.MeshStandardMaterial({
+      color: 0xC9A227,
+      roughness: 0.4,
+      metalness: 0.35
+    });
 
-  const skinDarkMat = new THREE.MeshStandardMaterial({
-    color: 0x466F4E,
-    roughness: 0.65,
-    metalness: 0.02
-  });
+  const skinMat =
+    new THREE.MeshStandardMaterial({
+      color: 0x5E9468,
+      roughness: 0.65,
+      metalness: 0.02
+    });
 
-  const bandMat = new THREE.MeshStandardMaterial({
-    color: 0x1B2A20,
-    roughness: 0.5,
-    metalness: 0.1
-  });
+  const skinDarkMat =
+    new THREE.MeshStandardMaterial({
+      color: 0x466F4E,
+      roughness: 0.65,
+      metalness: 0.02
+    });
 
-  const goldMat = new THREE.MeshStandardMaterial({
-    color: 0xC9A227,
-    roughness: 0.35,
-    metalness: 0.5
-  });
+  const bandMat =
+    new THREE.MeshStandardMaterial({
+      color: 0x1B2A20,
+      roughness: 0.5,
+      metalness: 0.1
+    });
 
-  const eyeMat = new THREE.MeshStandardMaterial({
-    color: 0xF4EFDD,
-    roughness: 0.3,
-    emissive: 0x2a2410,
-    emissiveIntensity: 0.15
-  });
+  const goldMat =
+    new THREE.MeshStandardMaterial({
+      color: 0xC9A227,
+      roughness: 0.35,
+      metalness: 0.5
+    });
 
-  const pupilMat = new THREE.MeshStandardMaterial({
-    color: 0x0A0F0B,
-    roughness: 0.4
-  });
+  const eyeMat =
+    new THREE.MeshStandardMaterial({
+      color: 0xF4EFDD,
+      roughness: 0.3,
+      emissive: 0x2a2410,
+      emissiveIntensity: 0.15
+    });
 
-  const body = new THREE.Group();
+  const pupilMat =
+    new THREE.MeshStandardMaterial({
+      color: 0x0A0F0B,
+      roughness: 0.4
+    });
+
+  const body =
+    new THREE.Group();
 
   rig.add(body);
 
+  /* ---------- Torso ---------- */
+
   const torso = new THREE.Mesh(
-    new THREE.CapsuleGeometry(0.62, 0.55, 6, 12),
+    new THREE.CapsuleGeometry(
+      0.62,
+      0.55,
+      6,
+      12
+    ),
     skinMat
   );
 
-  torso.position.y = 1.05;
+  torso.position.y =
+    1.05;
 
-  torso.scale.set(1, 1.05, 0.82);
+  torso.scale.set(
+    1,
+    1.05,
+    0.82
+  );
 
   body.add(torso);
 
-  const shellDome = new THREE.Mesh(
-    new THREE.SphereGeometry(
-      0.78,
-      24,
-      16,
-      0,
-      Math.PI * 2,
-      0,
-      Math.PI / 1.7
-    ),
-    shellMat
+  /* ---------- Shell ---------- */
+
+  const shellDome =
+    new THREE.Mesh(
+      new THREE.SphereGeometry(
+        0.78,
+        24,
+        16,
+        0,
+        Math.PI * 2,
+        0,
+        Math.PI / 1.7
+      ),
+      shellMat
+    );
+
+  shellDome.position.set(
+    0,
+    1.18,
+    -0.22
   );
 
-  shellDome.position.set(0, 1.18, -0.22);
+  shellDome.scale.set(
+    1,
+    0.82,
+    0.9
+  );
 
-  shellDome.scale.set(1, 0.82, 0.9);
-
-  shellDome.rotation.x = Math.PI;
+  shellDome.rotation.x =
+    Math.PI;
 
   body.add(shellDome);
 
-  const shellRing = new THREE.Mesh(
-    new THREE.TorusGeometry(
-      0.62,
-      0.045,
-      8,
-      24
-    ),
-    shellRimMat
-  );
+  const shellRing =
+    new THREE.Mesh(
+      new THREE.TorusGeometry(
+        0.62,
+        0.045,
+        8,
+        24
+      ),
+      shellRimMat
+    );
 
   shellRing.position.set(
     0,
@@ -732,16 +910,20 @@
     -0.22
   );
 
-  shellRing.rotation.x = Math.PI / 2;
+  shellRing.rotation.x =
+    Math.PI / 2;
 
   body.add(shellRing);
 
-  const plateGeo = new THREE.CylinderGeometry(
-    0.13,
-    0.13,
-    0.05,
-    6
-  );
+  /* ---------- Shell plates ---------- */
+
+  const plateGeo =
+    new THREE.CylinderGeometry(
+      0.13,
+      0.13,
+      0.05,
+      6
+    );
 
   const platePositions = [
     [0, 1.55, -0.55],
@@ -754,12 +936,14 @@
 
   platePositions.forEach(p => {
 
-    const plate = new THREE.Mesh(
-      plateGeo,
-      shellRimMat.clone()
-    );
+    const plate =
+      new THREE.Mesh(
+        plateGeo,
+        shellRimMat.clone()
+      );
 
-    plate.material.opacity = 0.85;
+    plate.material.opacity =
+      0.85;
 
     plate.position.set(
       p[0],
@@ -767,27 +951,31 @@
       p[2]
     );
 
-    plate.rotation.x = Math.PI / 2.3;
+    plate.rotation.x =
+      Math.PI / 2.3;
 
     body.add(plate);
 
   });
 
-  const plastron = new THREE.Mesh(
-    new THREE.SphereGeometry(
-      0.5,
-      16,
-      12,
-      0,
-      Math.PI * 2,
-      0,
-      Math.PI / 1.9
-    ),
-    new THREE.MeshStandardMaterial({
-      color: 0xB9AE86,
-      roughness: 0.6
-    })
-  );
+  /* ---------- Belly plastron ---------- */
+
+  const plastron =
+    new THREE.Mesh(
+      new THREE.SphereGeometry(
+        0.5,
+        16,
+        12,
+        0,
+        Math.PI * 2,
+        0,
+        Math.PI / 1.9
+      ),
+      new THREE.MeshStandardMaterial({
+        color: 0xB9AE86,
+        roughness: 0.6
+      })
+    );
 
   plastron.position.set(
     0,
@@ -803,7 +991,10 @@
 
   body.add(plastron);
 
-  const headGroup = new THREE.Group();
+  /* ---------- Head ---------- */
+
+  const headGroup =
+    new THREE.Group();
 
   headGroup.position.set(
     0,
@@ -813,14 +1004,15 @@
 
   body.add(headGroup);
 
-  const head = new THREE.Mesh(
-    new THREE.SphereGeometry(
-      0.36,
-      20,
-      16
-    ),
-    skinMat
-  );
+  const head =
+    new THREE.Mesh(
+      new THREE.SphereGeometry(
+        0.36,
+        20,
+        16
+      ),
+      skinMat
+    );
 
   head.scale.set(
     1,
@@ -830,14 +1022,15 @@
 
   headGroup.add(head);
 
-  const snout = new THREE.Mesh(
-    new THREE.SphereGeometry(
-      0.2,
-      16,
-      12
-    ),
-    skinDarkMat
-  );
+  const snout =
+    new THREE.Mesh(
+      new THREE.SphereGeometry(
+        0.2,
+        16,
+        12
+      ),
+      skinDarkMat
+    );
 
   snout.position.set(
     0,
@@ -853,16 +1046,19 @@
 
   headGroup.add(snout);
 
+  /* ---------- Eyes ---------- */
+
   [-0.16, 0.16].forEach(x => {
 
-    const eyeWhite = new THREE.Mesh(
-      new THREE.SphereGeometry(
-        0.085,
-        12,
-        10
-      ),
-      eyeMat
-    );
+    const eyeWhite =
+      new THREE.Mesh(
+        new THREE.SphereGeometry(
+          0.085,
+          12,
+          10
+        ),
+        eyeMat
+      );
 
     eyeWhite.position.set(
       x,
@@ -870,16 +1066,19 @@
       0.3
     );
 
-    headGroup.add(eyeWhite);
-
-    const pupil = new THREE.Mesh(
-      new THREE.SphereGeometry(
-        0.04,
-        8,
-        8
-      ),
-      pupilMat
+    headGroup.add(
+      eyeWhite
     );
+
+    const pupil =
+      new THREE.Mesh(
+        new THREE.SphereGeometry(
+          0.04,
+          8,
+          8
+        ),
+        pupilMat
+      );
 
     pupil.position.set(
       x,
@@ -887,20 +1086,25 @@
       0.37
     );
 
-    headGroup.add(pupil);
+    headGroup.add(
+      pupil
+    );
 
   });
 
-  const band = new THREE.Mesh(
-    new THREE.TorusGeometry(
-      0.365,
-      0.055,
-      8,
-      20,
-      Math.PI * 1.35
-    ),
-    bandMat
-  );
+  /* ---------- Mask / bandana ---------- */
+
+  const band =
+    new THREE.Mesh(
+      new THREE.TorusGeometry(
+        0.365,
+        0.055,
+        8,
+        20,
+        Math.PI * 1.35
+      ),
+      bandMat
+    );
 
   band.position.set(
     0,
@@ -908,21 +1112,24 @@
     0
   );
 
-  band.rotation.y = Math.PI / 2;
+  band.rotation.y =
+    Math.PI / 2;
 
-  band.rotation.z = -0.2;
+  band.rotation.z =
+    -0.2;
 
   headGroup.add(band);
 
-  const bandTailL = new THREE.Mesh(
-    new THREE.CylinderGeometry(
-      0.03,
-      0.015,
-      0.4,
-      6
-    ),
-    bandMat
-  );
+  const bandTailL =
+    new THREE.Mesh(
+      new THREE.CylinderGeometry(
+        0.03,
+        0.015,
+        0.4,
+        6
+      ),
+      bandMat
+    );
 
   bandTailL.position.set(
     -0.3,
@@ -930,23 +1137,35 @@
     -0.22
   );
 
-  bandTailL.rotation.z = 0.5;
+  bandTailL.rotation.z =
+    0.5;
 
-  bandTailL.rotation.x = 0.3;
+  bandTailL.rotation.x =
+    0.3;
 
-  headGroup.add(bandTailL);
+  headGroup.add(
+    bandTailL
+  );
 
-  const bandTailR = bandTailL.clone();
+  const bandTailR =
+    bandTailL.clone();
 
-  bandTailR.position.x = 0.32;
+  bandTailR.position.x =
+    0.32;
 
-  bandTailR.rotation.z = -0.6;
+  bandTailR.rotation.z =
+    -0.6;
 
-  headGroup.add(bandTailR);
+  headGroup.add(
+    bandTailR
+  );
+
+  /* ---------- Arms ---------- */
 
   function makeArm(sign){
 
-    const arm = new THREE.Group();
+    const arm =
+      new THREE.Group();
 
     arm.position.set(
       sign * 0.62,
@@ -954,31 +1173,35 @@
       0.02
     );
 
-    const upper = new THREE.Mesh(
-      new THREE.CapsuleGeometry(
-        0.13,
-        0.35,
-        4,
-        8
-      ),
-      skinMat
-    );
+    const upper =
+      new THREE.Mesh(
+        new THREE.CapsuleGeometry(
+          0.13,
+          0.35,
+          4,
+          8
+        ),
+        skinMat
+      );
 
-    upper.position.y = -0.18;
+    upper.position.y =
+      -0.18;
 
-    upper.rotation.z = sign * 0.35;
+    upper.rotation.z =
+      sign * 0.35;
 
     arm.add(upper);
 
-    const fore = new THREE.Mesh(
-      new THREE.CapsuleGeometry(
-        0.11,
-        0.32,
-        4,
-        8
-      ),
-      skinDarkMat
-    );
+    const fore =
+      new THREE.Mesh(
+        new THREE.CapsuleGeometry(
+          0.11,
+          0.32,
+          4,
+          8
+        ),
+        skinDarkMat
+      );
 
     fore.position.set(
       sign * 0.16,
@@ -986,18 +1209,20 @@
       0.05
     );
 
-    fore.rotation.z = sign * 0.15;
+    fore.rotation.z =
+      sign * 0.15;
 
     arm.add(fore);
 
-    const hand = new THREE.Mesh(
-      new THREE.SphereGeometry(
-        0.1,
-        10,
-        8
-      ),
-      skinMat
-    );
+    const hand =
+      new THREE.Mesh(
+        new THREE.SphereGeometry(
+          0.1,
+          10,
+          8
+        ),
+        skinMat
+      );
 
     hand.position.set(
       sign * 0.2,
@@ -1007,50 +1232,62 @@
 
     arm.add(hand);
 
-    const sai = new THREE.Group();
+    /* Sai weapon */
 
-    const saiBlade = new THREE.Mesh(
-      new THREE.ConeGeometry(
-        0.025,
-        0.42,
-        6
-      ),
-      goldMat
-    );
+    const sai =
+      new THREE.Group();
 
-    saiBlade.rotation.x = Math.PI;
+    const saiBlade =
+      new THREE.Mesh(
+        new THREE.ConeGeometry(
+          0.025,
+          0.42,
+          6
+        ),
+        goldMat
+      );
 
-    saiBlade.position.y = 0.24;
+    saiBlade.rotation.x =
+      Math.PI;
+
+    saiBlade.position.y =
+      0.24;
 
     sai.add(saiBlade);
 
-    const saiGuard = new THREE.Mesh(
-      new THREE.TorusGeometry(
-        0.07,
-        0.012,
-        6,
-        12
-      ),
-      goldMat
-    );
+    const saiGuard =
+      new THREE.Mesh(
+        new THREE.TorusGeometry(
+          0.07,
+          0.012,
+          6,
+          12
+        ),
+        goldMat
+      );
 
-    saiGuard.rotation.x = Math.PI / 2;
+    saiGuard.rotation.x =
+      Math.PI / 2;
 
     sai.add(saiGuard);
 
-    const saiHandle = new THREE.Mesh(
-      new THREE.CylinderGeometry(
-        0.018,
-        0.018,
-        0.16,
-        6
-      ),
-      bandMat
+    const saiHandle =
+      new THREE.Mesh(
+        new THREE.CylinderGeometry(
+          0.018,
+          0.018,
+          0.16,
+          6
+        ),
+        bandMat
+      );
+
+    saiHandle.position.y =
+      -0.1;
+
+    sai.add(
+      saiHandle
     );
-
-    saiHandle.position.y = -0.1;
-
-    sai.add(saiHandle);
 
     sai.position.set(
       sign * 0.2,
@@ -1058,19 +1295,28 @@
       0.08
     );
 
-    sai.rotation.z = sign * 0.15;
+    sai.rotation.z =
+      sign * 0.15;
 
     arm.add(sai);
 
     return arm;
   }
 
-  body.add(makeArm(-1));
-  body.add(makeArm(1));
+  body.add(
+    makeArm(-1)
+  );
+
+  body.add(
+    makeArm(1)
+  );
+
+  /* ---------- Legs ---------- */
 
   function makeLeg(sign){
 
-    const leg = new THREE.Group();
+    const leg =
+      new THREE.Group();
 
     leg.position.set(
       sign * 0.28,
@@ -1078,42 +1324,47 @@
       0.05
     );
 
-    const thigh = new THREE.Mesh(
-      new THREE.CapsuleGeometry(
-        0.15,
-        0.32,
-        4,
-        8
-      ),
-      skinDarkMat
-    );
+    const thigh =
+      new THREE.Mesh(
+        new THREE.CapsuleGeometry(
+          0.15,
+          0.32,
+          4,
+          8
+        ),
+        skinDarkMat
+      );
 
-    thigh.position.y = -0.15;
+    thigh.position.y =
+      -0.15;
 
     leg.add(thigh);
 
-    const shin = new THREE.Mesh(
-      new THREE.CapsuleGeometry(
-        0.13,
-        0.3,
-        4,
-        8
-      ),
-      skinMat
-    );
+    const shin =
+      new THREE.Mesh(
+        new THREE.CapsuleGeometry(
+          0.13,
+          0.3,
+          4,
+          8
+        ),
+        skinMat
+      );
 
-    shin.position.y = -0.48;
+    shin.position.y =
+      -0.48;
 
     leg.add(shin);
 
-    const foot = new THREE.Mesh(
-      new THREE.SphereGeometry(
-        0.13,
-        10,
-        8
-      ),
-      skinDarkMat
-    );
+    const foot =
+      new THREE.Mesh(
+        new THREE.SphereGeometry(
+          0.13,
+          10,
+          8
+        ),
+        skinDarkMat
+      );
 
     foot.position.set(
       0,
@@ -1129,76 +1380,99 @@
 
     leg.add(foot);
 
-    const wrap1 = new THREE.Mesh(
-      new THREE.TorusGeometry(
-        0.14,
-        0.02,
-        6,
-        12
-      ),
-      bandMat
-    );
+    const wrap1 =
+      new THREE.Mesh(
+        new THREE.TorusGeometry(
+          0.14,
+          0.02,
+          6,
+          12
+        ),
+        bandMat
+      );
 
-    wrap1.position.y = -0.32;
+    wrap1.position.y =
+      -0.32;
 
-    wrap1.rotation.x = Math.PI / 2;
+    wrap1.rotation.x =
+      Math.PI / 2;
 
     leg.add(wrap1);
 
     return leg;
   }
 
-  body.add(makeLeg(-1));
-  body.add(makeLeg(1));
-
-  const floor = new THREE.Mesh(
-    new THREE.CircleGeometry(
-      2.4,
-      48
-    ),
-    new THREE.MeshStandardMaterial({
-      color: 0x142016,
-      roughness: 0.9,
-      transparent: true,
-      opacity: 0.75
-    })
+  body.add(
+    makeLeg(-1)
   );
 
-  floor.rotation.x = -Math.PI / 2;
+  body.add(
+    makeLeg(1)
+  );
 
-  floor.position.y = -0.15;
+  /* ---------- Ground disc ---------- */
+
+  const floor =
+    new THREE.Mesh(
+      new THREE.CircleGeometry(
+        2.4,
+        48
+      ),
+      new THREE.MeshStandardMaterial({
+        color: 0x142016,
+        roughness: 0.9,
+        transparent: true,
+        opacity: 0.75
+      })
+    );
+
+  floor.rotation.x =
+    -Math.PI / 2;
+
+  floor.position.y =
+    -0.15;
 
   rig.add(floor);
 
-  const floorRing = new THREE.Mesh(
-    new THREE.RingGeometry(
-      1.55,
-      1.6,
-      48
-    ),
-    new THREE.MeshStandardMaterial({
-      color: 0xC9A227,
-      roughness: 0.4,
-      metalness: 0.4,
-      side: THREE.DoubleSide,
-      transparent:true,
-      opacity:0.55
-    })
+  const floorRing =
+    new THREE.Mesh(
+      new THREE.RingGeometry(
+        1.55,
+        1.6,
+        48
+      ),
+      new THREE.MeshStandardMaterial({
+        color: 0xC9A227,
+        roughness: 0.4,
+        metalness: 0.4,
+        side: THREE.DoubleSide,
+        transparent:true,
+        opacity:0.55
+      })
+    );
+
+  floorRing.rotation.x =
+    -Math.PI / 2;
+
+  floorRing.position.y =
+    -0.148;
+
+  rig.add(
+    floorRing
   );
 
-  floorRing.rotation.x = -Math.PI / 2;
+  /* ---------- Embers ---------- */
 
-  floorRing.position.y = -0.148;
+  const emberCount =
+    60;
 
-  rig.add(floorRing);
+  const emberGeo =
+    new THREE.BufferGeometry();
 
-  const emberCount = 60;
-
-  const emberGeo = new THREE.BufferGeometry();
-
-  const positions = new Float32Array(
-    emberCount * 3
-  );
+  const positions =
+    new Float32Array(
+      emberCount * 3
+    );
 
   for (
     let i = 0;
@@ -1224,47 +1498,63 @@
     )
   );
 
-  const emberMat = new THREE.PointsMaterial({
-    color: 0xE6C862,
-    size: 0.02,
-    transparent:true,
-    opacity:0.6
-  });
+  const emberMat =
+    new THREE.PointsMaterial({
+      color: 0xE6C862,
+      size: 0.02,
+      transparent:true,
+      opacity:0.6
+    });
 
-  const embers = new THREE.Points(
-    emberGeo,
-    emberMat
+  const embers =
+    new THREE.Points(
+      emberGeo,
+      emberMat
+    );
+
+  scene.add(
+    embers
   );
 
-  scene.add(embers);
+  /* ---------- Interaction ---------- */
 
-  let targetRotY = 0.35;
+  let targetRotY =
+    0.35;
 
-  let currentRotY = 0.35;
+  let currentRotY =
+    0.35;
 
-  let autoSpin = true;
+  let autoSpin =
+    true;
 
-  let isDragging = false;
+  let isDragging =
+    false;
 
-  let lastX = 0;
+  let lastX =
+    0;
 
-  let spinBoost = 0;
+  let spinBoost =
+    0;
 
   body.rotation.y =
     currentRotY;
 
   function onDown(x){
 
-    isDragging = true;
+    isDragging =
+      true;
 
-    lastX = x;
+    lastX =
+      x;
 
-    autoSpin = false;
+    autoSpin =
+      false;
   }
 
   function onMove(x){
 
-    if(!isDragging) return;
+    if(!isDragging)
+      return;
 
     const dx =
       x - lastX;
@@ -1272,12 +1562,14 @@
     targetRotY +=
       dx * 0.008;
 
-    lastX = x;
+    lastX =
+      x;
   }
 
   function onUp(){
 
-    isDragging = false;
+    isDragging =
+      false;
   }
 
   renderer.domElement.addEventListener(
@@ -1297,13 +1589,17 @@
 
   renderer.domElement.addEventListener(
     'touchstart',
-    e => onDown(e.touches[0].clientX),
+    e => onDown(
+      e.touches[0].clientX
+    ),
     {passive:true}
   );
 
   window.addEventListener(
     'touchmove',
-    e => onMove(e.touches[0].clientX),
+    e => onMove(
+      e.touches[0].clientX
+    ),
     {passive:true}
   );
 
@@ -1313,7 +1609,9 @@
   );
 
   document
-    .getElementById('cta-spin')
+    .getElementById(
+      'cta-spin'
+    )
     .addEventListener(
       'click',
       () => {
@@ -1370,7 +1668,9 @@
         spinBoost -=
           step;
 
-      } else if(autoSpin){
+      } else if (
+        autoSpin
+      ){
 
         targetRotY +=
           0.0032;
@@ -1387,10 +1687,14 @@
       currentRotY;
 
     body.position.y =
-      Math.sin(t * 1.1) * 0.045;
+      Math.sin(
+        t * 1.1
+      ) * 0.045;
 
     headGroup.rotation.y =
-      Math.sin(t * 0.6) * 0.06;
+      Math.sin(
+        t * 0.6
+      ) * 0.06;
 
     const emberPos =
       emberGeo.attributes.position;
@@ -1424,6 +1728,8 @@
       camera
     );
   }
+
+  /* ---------- Reveal once first frame is ready ---------- */
 
   requestAnimationFrame(() => {
 
